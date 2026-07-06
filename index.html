@@ -1,566 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Church Members Inventory</title>
-    <!-- Font Awesome 6 (free) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Church Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-        }
         body {
-            background: #f0f5fb;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 2rem 1rem;
+            background: #f8f9fa;
         }
-        .app-container {
-            max-width: 1300px;
-            width: 100%;
-            background: white;
-            border-radius: 36px;
-            box-shadow: 0 20px 40px rgba(0, 20, 40, 0.10);
-            padding: 2rem 1.8rem;
+        .sidebar {
+            height: 100vh;
+            background: #2c3e50;
+            padding-top: 20px;
         }
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #1a2b3c;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 0.2rem;
-        }
-        h1 i {
-            color: #2a5f7a;
-            font-size: 2.2rem;
-        }
-        .subhead {
-            color: #4a5f73;
-            margin-bottom: 2rem;
-            border-left: 4px solid #2a5f7a;
-            padding-left: 16px;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-        }
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 2rem;
-            background: #f0f6fd;
-            padding: 0.8rem 1.5rem;
-            border-radius: 60px;
-        }
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 0.3rem 1.2rem;
-            border-radius: 50px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            flex: 1 1 260px;
-        }
-        .search-box i {
-            color: #6f8aa3;
-            margin-right: 10px;
-        }
-        .search-box input {
-            border: none;
-            outline: none;
-            padding: 10px 0;
-            width: 100%;
-            font-size: 1rem;
-            background: transparent;
-        }
-        .btn {
-            border: none;
-            padding: 0.7rem 1.8rem;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: 0.15s;
-            background: #e9eff6;
-            color: #1a2b3c;
-        }
-        .btn-primary {
-            background: #1f4462;
+        .sidebar a {
             color: white;
-            box-shadow: 0 4px 8px rgba(31, 68, 98, 0.25);
-            border: 1px solid #16364e;
-        }
-        .btn-primary:hover {
-            background: #15344e;
-            transform: scale(0.97);
-        }
-        .btn-success {
-            background: #1d6b47;
-            color: white;
-            border: 1px solid #15573a;
-        }
-        .btn-success:hover {
-            background: #15573a;
-        }
-        .btn-danger {
-            background: #b13e3e;
-            color: white;
-            border: 1px solid #952f2f;
-        }
-        .btn-danger:hover {
-            background: #9a3232;
-        }
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #b6c9db;
-            color: #1f3b57;
-        }
-        .btn-outline:hover {
-            background: #e6edf5;
-        }
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 20px;
-            border: 1px solid #e3eaf2;
-            background: white;
-            margin-top: 0.5rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-            min-width: 600px;
-        }
-        th {
-            background: #e9eff6;
-            color: #1f3b57;
-            font-weight: 600;
-            padding: 1rem 1rem;
-            text-align: left;
-            border-bottom: 2px solid #d0ddee;
-        }
-        td {
-            padding: 0.9rem 1rem;
-            border-bottom: 1px solid #e7edf5;
-            vertical-align: middle;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        tr:hover td {
-            background: #f8fafd;
-        }
-        .member-actions i {
-            margin: 0 5px;
-            cursor: pointer;
-            color: #4d6f8f;
-            font-size: 1.1rem;
-            transition: 0.1s;
-        }
-        .member-actions i:hover {
-            color: #1a2b3c;
-            transform: scale(1.15);
-        }
-        .badge-tith {
-            background: #d4e2d9;
-            color: #1b5a39;
-            font-weight: 500;
-            padding: 0.2rem 0.9rem;
-            border-radius: 40px;
-            display: inline-block;
-            font-size: 0.8rem;
-        }
-        .badge-tith.high {
-            background: #c7dccf;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #5b738b;
-        }
-        .empty-state i {
-            font-size: 3.5rem;
-            opacity: 0.4;
-            margin-bottom: 12px;
-        }
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.35);
-            backdrop-filter: blur(3px);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-card {
-            background: white;
-            border-radius: 40px;
-            padding: 2.5rem 2rem;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
-            animation: fadeSlide 0.2s ease;
-        }
-        @keyframes fadeSlide {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .modal-card h2 {
-            margin-bottom: 1.8rem;
-            color: #1a2b3c;
-            font-weight: 500;
-        }
-        .modal-card label {
-            font-weight: 500;
-            color: #1f3b57;
+            padding: 12px 20px;
             display: block;
-            margin: 0.8rem 0 0.2rem;
+            text-decoration: none;
         }
-        .modal-card input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #cfddee;
-            border-radius: 40px;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.15s;
+        .sidebar a:hover {
+            background: #34495e;
         }
-        .modal-card input:focus {
-            border-color: #1f4462;
-            box-shadow: 0 0 0 3px rgba(31,68,98,0.15);
+        .sidebar a.active {
+            background: #1a252f;
         }
-        .modal-actions {
-            display: flex;
-            gap: 14px;
-            margin-top: 2rem;
-            justify-content: flex-end;
+        .main-content {
+            padding: 30px;
         }
-        .modal-actions .btn {
-            min-width: 100px;
-            justify-content: center;
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .btn-close-modal {
-            background: #dbe3ec;
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
         }
-        .btn-close-modal:hover {
-            background: #c9d3e0;
+        .stat-card.blue {
+            background: #3498db;
         }
-        .footer-info {
-            margin-top: 1.8rem;
-            font-size: 0.85rem;
-            color: #5f7a94;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            border-top: 1px solid #dce5ef;
-            padding-top: 1.5rem;
+        .stat-card.green {
+            background: #2ecc71;
         }
-        .footer-info span i {
-            margin-right: 5px;
+        .stat-card.orange {
+            background: #f39c12;
         }
-        .inline-icon {
-            margin-right: 6px;
+        .stat-card.red {
+            background: #e74c3c;
         }
-        @media (max-width: 700px) {
-            .app-container { padding: 1.2rem; }
-            .toolbar { flex-direction: column; align-items: stretch; border-radius: 30px; }
-            .search-box { width: 100%; }
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .stat-card .label {
+            font-size: 14px;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <h1><i class="fas fa-church"></i> Church Inventory</h1>
-        <div class="subhead"><i class="fas fa-users" style="margin-right: 12px;"></i> Members · Tithing records · Join dates</div>
-
-        <div class="toolbar">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search by name or record...">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h4 class="text-white text-center mt-2 mb-4">⛪ Church System</h4>
+                <a href="#" class="active">🏠 Dashboard</a>
+                <a href="#" onclick="loadPage('members')">👥 Members</a>
+                <a href="#" onclick="loadPage('inventory')">📦 Inventory</a>
+                <a href="#" onclick="loadPage('tithes')">💰 Tithes</a>
+                <a href="#" onclick="loadPage('departures')">🚪 Departures</a>
+                <hr class="border-light" />
+                <a href="#" onclick="loadPage('reports')">📊 Reports</a>
             </div>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <button class="btn btn-primary" id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add Member</button>
-                <button class="btn btn-outline" id="resetDataBtn"><i class="fas fa-undo-alt"></i> Reset</button>
-            </div>
-        </div>
 
-        <div class="table-wrapper">
-            <table id="memberTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Record / ID</th>
-                        <th>Date Joined</th>
-                        <th>Tithing</th>
-                        <th style="text-align: center;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- dynamic rows -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="footer-info">
-            <span><i class="fas fa-database"></i> <span id="memberCount">0</span> members</span>
-            <span><i class="fas fa-check-circle" style="color: #1d6b47;"></i> Data saved in your browser</span>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal" id="memberModal">
-        <div class="modal-card">
-            <h2 id="modalTitle"><i class="fas fa-user-plus" style="margin-right: 10px;"></i> Add Member</h2>
-            <form id="memberForm">
-                <label for="nameInput"><i class="fas fa-user"></i> Full Name</label>
-                <input type="text" id="nameInput" placeholder="e.g. Sarah Johnson" required>
-
-                <label for="recordInput"><i class="fas fa-id-card"></i> Record / ID</label>
-                <input type="text" id="recordInput" placeholder="e.g. M-1024 or 2026-07" required>
-
-                <label for="dateInput"><i class="fas fa-calendar-alt"></i> Date Joined</label>
-                <input type="date" id="dateInput" required>
-
-                <label for="tithingInput"><i class="fas fa-coins"></i> Tithing (USD)</label>
-                <input type="number" id="tithingInput" placeholder="0.00" step="0.01" min="0" value="0.00">
-
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-close-modal" id="closeModalBtn">Cancel</button>
-                    <button type="submit" class="btn btn-success" id="saveMemberBtn"><i class="fas fa-save"></i> Save</button>
-                </div>
-                <input type="hidden" id="editIndex" value="-1">
-            </form>
-        </div>
-    </div>
-
-    <script>
-        (function() {
-            // ---------- DATA ----------
-            let members = [];
-            let nextId = 1;
-
-            // Load from localStorage
-            function loadFromStorage() {
-                const stored = localStorage.getItem('churchMembersData');
-                if (stored) {
-                    try {
-                        const parsed = JSON.parse(stored);
-                        if (Array.isArray(parsed) && parsed.length) {
-                            members = parsed;
-                            // find max id for nextId
-                            let max = 0;
-                            members.forEach(m => { if (m.id && m.id > max) max = m.id; });
-                            nextId = max + 1;
-                            return true;
-                        }
-                    } catch (e) {}
-                }
-                return false;
-            }
-
-            // save to localStorage
-            function saveToStorage() {
-                localStorage.setItem('churchMembersData', JSON.stringify(members));
-            }
-
-            // ---------- DEFAULT DATA (if no storage) ----------
-            function initDefaultData() {
-                members = [
-                    { id: nextId++, name: 'Michael Roberts', record: 'M-1024', date: '2023-09-15', tithing: 320.50 },
-                    { id: nextId++, name: 'Grace Kimani', record: 'G-2105', date: '2022-11-02', tithing: 150.00 },
-                    { id: nextId++, name: 'James Oduya', record: 'J-9876', date: '2024-01-20', tithing: 210.75 },
-                    { id: nextId++, name: 'Elizabeth Mwangi', record: 'E-4523', date: '2023-06-10', tithing: 85.30 },
-                    { id: nextId++, name: 'David Njoroge', record: 'D-6654', date: '2024-08-30', tithing: 470.00 },
-                ];
-                saveToStorage();
-            }
-
-            // load or init
-            if (!loadFromStorage()) {
-                initDefaultData();
-            }
-
-            // ---------- RENDER ----------
-            function renderTable(filter = '') {
-                const tbody = document.getElementById('tableBody');
-                const searchTerm = filter.trim().toLowerCase();
-                let filtered = members;
-                if (searchTerm) {
-                    filtered = members.filter(m => 
-                        m.name.toLowerCase().includes(searchTerm) ||
-                        m.record.toLowerCase().includes(searchTerm)
-                    );
-                }
-
-                if (filtered.length === 0) {
-                    tbody.innerHTML = `
-                        <tr><td colspan="5">
-                            <div class="empty-state">
-                                <i class="fas fa-people-arrows"></i>
-                                <p>${members.length === 0 ? 'No members yet. Add one!' : 'No matching members found.'}</p>
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <h2 id="pageTitle">📊 Dashboard</h2>
+                <div id="contentArea">
+                    <!-- Dashboard Stats -->
+                    <div class="row mt-4" id="dashboardStats">
+                        <div class="col-md-3">
+                            <div class="stat-card blue">
+                                <div class="number" id="totalMembers">0</div>
+                                <div class="label">Total Members</div>
                             </div>
-                        </td></tr>
-                    `;
-                } else {
-                    tbody.innerHTML = filtered.map((m, idx) => {
-                        const realIndex = members.indexOf(m); // to use for edit/delete
-                        return `
-                            <tr>
-                                <td><i class="fas fa-user-circle" style="margin-right: 8px; color: #2a5f7a;"></i>${m.name}</td>
-                                <td><span style="background: #eef3f9; padding: 0.2rem 0.9rem; border-radius: 20px;">${m.record}</span></td>
-                                <td><i class="far fa-calendar-alt" style="margin-right: 6px; color: #4d6f8f;"></i>${m.date}</td>
-                                <td><span class="badge-tith ${m.tithing > 200 ? 'high' : ''}"><i class="fas fa-dollar-sign" style="font-size: 0.7rem;"></i> ${m.tithing.toFixed(2)}</span></td>
-                                <td class="member-actions" style="text-align: center;">
-                                    <i class="fas fa-edit" data-action="edit" data-index="${realIndex}" title="Edit"></i>
-                                    <i class="fas fa-trash-alt" data-action="delete" data-index="${realIndex}" title="Remove" style="color: #b13e3e;"></i>
-                                </td>
-                            </tr>
-                        `;
-                    }).join('');
-                }
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card green">
+                                <div class="number" id="totalTithes">$0</div>
+                                <div class="label">Total Tithes</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card orange">
+                                <div class="number" id="totalItems">0</div>
+                                <div class="label">Inventory Items</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card red">
+                                <div class="number" id="activeMembers">0</div>
+                                <div class="label">Active Members</div>
+                            </div>
+                        </div>
+                    </div>
 
-                // update member count
-                document.getElementById('memberCount').textContent = members.length;
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card p-3">
+                                <h5>📋 Recent Members</h5>
+                                <div id="recentMembers">Loading...</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-3">
+                                <h5>📦 Recent Inventory</h5>
+                                <div id="recentInventory">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                // attach event listeners to action icons
-                document.querySelectorAll('[data-action="edit"]').forEach(el => {
-                    el.addEventListener('click', function(e) {
-                        const idx = parseInt(this.dataset.index);
-                        openEditModal(idx);
-                    });
-                });
-                document.querySelectorAll('[data-action="delete"]').forEach(el => {
-                    el.addEventListener('click', function(e) {
-                        const idx = parseInt(this.dataset.index);
-                        if (confirm(`Delete member "${members[idx].name}" ?`)) {
-                            members.splice(idx, 1);
-                            saveToStorage();
-                            renderTable(document.getElementById('searchInput').value);
-                        }
-                    });
-                });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== DATA =====
+        let members = JSON.parse(localStorage.getItem('churchMembers')) || [];
+        let inventory = JSON.parse(localStorage.getItem('churchInventory')) || [];
+        let tithes = JSON.parse(localStorage.getItem('churchTithes')) || [];
+        let departures = JSON.parse(localStorage.getItem('churchDepartures')) || [];
+
+        // ===== SAVE DATA =====
+        function saveData() {
+            localStorage.setItem('churchMembers', JSON.stringify(members));
+            localStorage.setItem('churchInventory', JSON.stringify(inventory));
+            localStorage.setItem('churchTithes', JSON.stringify(tithes));
+            localStorage.setItem('churchDepartures', JSON.stringify(departures));
+            updateDashboard();
+        }
+
+        // ===== UPDATE DASHBOARD =====
+        function updateDashboard() {
+            document.getElementById('totalMembers').textContent = members.length;
+            document.getElementById('activeMembers').textContent = members.filter(m => m.status === 'Active').length;
+            document.getElementById('totalItems').textContent = inventory.length;
+            
+            let total = tithes.reduce((sum, t) => sum + t.amount, 0);
+            document.getElementById('totalTithes').textContent = '$' + total.toLocaleString();
+
+            // Recent Members
+            let recent = members.slice(-5).reverse();
+            let html = '<ul class="list-group">';
+            recent.forEach(m => {
+                html += `<li class="list-group-item">${m.name} - ${m.status || 'Active'} <small class="text-muted">(${m.registrationDate})</small></li>`;
+            });
+            if (recent.length === 0) html += '<li class="list-group-item text-muted">No members yet</li>';
+            html += '</ul>';
+            document.getElementById('recentMembers').innerHTML = html;
+
+            // Recent Inventory
+            let recentInv = inventory.slice(-5).reverse();
+            html = '<ul class="list-group">';
+            recentInv.forEach(item => {
+                html += `<li class="list-group-item">${item.name} - ${item.quantity} ${item.unit || ''} <small class="text-muted">(${item.location})</small></li>`;
+            });
+            if (recentInv.length === 0) html += '<li class="list-group-item text-muted">No inventory items yet</li>';
+            html += '</ul>';
+            document.getElementById('recentInventory').innerHTML = html;
+        }
+
+        // ===== LOAD PAGES =====
+        function loadPage(page) {
+            const titles = {
+                members: '👥 Members',
+                inventory: '📦 Inventory',
+                tithes: '💰 Tithes',
+                departures: '🚪 Departures',
+                reports: '📊 Reports'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
+
+            let content = '';
+            if (page === 'members') content = getMembersPage();
+            else if (page === 'inventory') content = getInventoryPage();
+            else if (page === 'tithes') content = getTithesPage();
+            else if (page === 'departures') content = getDeparturesPage();
+            else if (page === 'reports') content = getReportsPage();
+            else content = getDashboardPage();
+
+            document.getElementById('contentArea').innerHTML = content;
+
+            // Highlight sidebar
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            const links = document.querySelectorAll('.sidebar a');
+            const map = { members: 1, inventory: 2, tithes: 3, departures: 4, reports: 5 };
+            if (map[page]) links[map[page]].classList.add('active');
+        }
+
+        // ===== GET DASHBOARD =====
+        function getDashboardPage() {
+            return `
+                <div class="row mt-4">
+                    <div class="col-md-3"><div class="stat-card blue"><div class="number">${members.length}</div><div class="label">Total Members</div></div></div>
+                    <div class="col-md-3"><div class="stat-card green"><div class="number">$${tithes.reduce((s,t) => s + t.amount, 0).toLocaleString()}</div><div class="label">Total Tithes</div></div></div>
+                    <div class="col-md-3"><div class="stat-card orange"><div class="number">${inventory.length}</div><div class="label">Inventory Items</div></div></div>
+                    <div class="col-md-3"><div class="stat-card red"><div class="number">${members.filter(m => m.status === 'Active').length}</div><div class="label">Active Members</div></div></div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6"><div class="card p-3"><h5>📋 Recent Members</h5><div id="recentMembers">${getRecentMembers()}</div></div></div>
+                    <div class="col-md-6"><div class="card p-3"><h5>📦 Recent Inventory</h5><div id="recentInventory">${getRecentInventory()}</div></div></div>
+                </div>
+            `;
+        }
+
+        function getRecentMembers() {
+            let html = '<ul class="list-group">';
+            members.slice(-5).reverse().forEach(m => {
+                html += `<li class="list-group-item">${m.name} - ${m.status || 'Active'} <small class="text-muted">(${m.registrationDate})</small></li>`;
+            });
+            if (members.length === 0) html += '<li class="list-group-item text-muted">No members yet</li>';
+            html += '</ul>';
+            return html;
+        }
+
+        function getRecentInventory() {
+            let html = '<ul class="list-group">';
+            inventory.slice(-5).reverse().forEach(item => {
+                html += `<li class="list-group-item">${item.name} - ${item.quantity} ${item.unit || ''} <small class="text-muted">(${item.location})</small></li>`;
+            });
+            if (inventory.length === 0) html += '<li class="list-group-item text-muted">No inventory items yet</li>';
+            html += '</ul>';
+            return html;
+        }
+
+        // ===== MEMBERS PAGE =====
+        function getMembersPage() {
+            let html = `
+                <button class="btn btn-primary mb-3" onclick="showAddMember()">+ Add Member</button>
+                <table class="table table-striped">
+                    <thead><tr><th>Name</th><th>Age</th><th>Phone</th><th>Registration Date</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+            `;
+            members.forEach((m, i) => {
+                html += `<tr>
+                    <td>${m.name}</td>
+                    <td>${m.age || '-'}</td>
+                    <td>${m.phone || '-'}</td>
+                    <td>${m.registrationDate || '-'}</td>
+                    <td><span class="badge bg-${m.status === 'Active' ? 'success' : m.status === 'Inactive' ? 'danger' : 'warning'}">${m.status || 'Active'}</span></td>
+                    <td><button class="btn btn-sm btn-danger" onclick="deleteMember(${i})">✕</button></td>
+                </tr>`;
+            });
+            if (members.length === 0) html += '<tr><td colspan="6" class="text-center text-muted">No members added yet</td></tr>';
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // ===== ADD MEMBER =====
+        function showAddMember() {
+            const name = prompt('Enter Member Name:');
+            if (!name) return;
+            const age = prompt('Enter Age:');
+            const phone = prompt('Enter Phone Number:');
+            const status = confirm('Is this member Active? Click OK for Active, Cancel for Inactive');
+            
+            members.push({
+                name: name,
+                age: age || '',
+                phone: phone || '',
+                registrationDate: new Date().toISOString().split('T')[0],
+                status: status ? 'Active' : 'Inactive'
+            });
+            saveData();
+            loadPage('members');
+        }
+
+        function deleteMember(index) {
+            if (confirm(`Delete ${members[index].name}?`)) {
+                members.splice(index, 1);
+                saveData();
+                loadPage('members');
             }
+        }
 
-            // ---------- MODAL ----------
-            const modal = document.getElementById('memberModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const nameInput = document.getElementById('nameInput');
-            const recordInput = document.getElementById('recordInput');
-            const dateInput = document.getElementById('dateInput');
-            const tithingInput = document.getElementById('tithingInput');
-            const editIndexInput = document.getElementById('editIndex');
-            const memberForm = document.getElementById('memberForm');
+        // ===== INVENTORY PAGE =====
+        function getInventoryPage() {
+            let html = `
+                <button class="btn btn-primary mb-3" onclick="showAddInventory()">+ Add Inventory Item</button>
+                <table class="table table-striped">
+                    <thead><tr><th>Item Name</th><th>Quantity</th><th>Unit</th><th>Location</th><th>Condition</th><th>Actions</th></tr></thead>
+                    <tbody>
+            `;
+            inventory.forEach((item, i) => {
+                html += `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.unit || '-'}</td>
+                    <td>${item.location || '-'}</td>
+                    <td>${item.condition || 'Good'}</td>
+                    <td><button class="btn btn-sm btn-danger" onclick="deleteInventory(${i})">✕</button></td>
+                </tr>`;
+            });
+            if (inventory.length === 0) html += '<tr><td colspan="6" class="text-center text-muted">No inventory items yet</td></tr>';
+            html += '</tbody></table>';
+            return html;
+        }
 
-            function openAddModal() {
-                modalTitle.innerHTML = '<i class="fas fa-user-plus" style="margin-right: 10px;"></i> Add Member';
-                nameInput.value = '';
-                recordInput.value = '';
-                dateInput.value = '';
-                tithingInput.value = '0.00';
-                editIndexInput.value = '-1';
-                modal.style.display = 'flex';
-                nameInput.focus();
+        function showAddInventory() {
+            const name = prompt('Enter Item Name:');
+            if (!name) return;
+            const quantity = prompt('Enter Quantity:');
+            const location = prompt('Enter Location (e.g., Main Hall, Storage):');
+            
+            inventory.push({
+                name: name,
+                quantity: parseInt(quantity) || 1,
+                unit: 'Each',
+                location: location || 'Unknown',
+                condition: 'Good'
+            });
+            saveData();
+            loadPage('inventory');
+        }
+
+        function deleteInventory(index) {
+            if (confirm(`Delete ${inventory[index].name}?`)) {
+                inventory.splice(index, 1);
+                saveData();
+                loadPage('inventory');
             }
+        }
 
-            function openEditModal(index) {
-                const m = members[index];
-                if (!m) return;
-                modalTitle.innerHTML = '<i class="fas fa-user-edit" style="margin-right: 10px;"></i> Edit Member';
-                nameInput.value = m.name;
-                recordInput.value = m.record;
-                dateInput.value = m.date;
-                tithingInput.value = m.tithing;
-                editIndexInput.value = index;
-                modal.style.display = 'flex';
-                nameInput.focus();
+        // ===== TITHES PAGE =====
+        function getTithesPage() {
+            let html = `
+                <button class="btn btn-primary mb-3" onclick="showAddTithe()">+ Add Tithe</button>
+                <table class="table table-striped">
+                    <thead><tr><th>Member</th><th>Amount</th><th>Payment Method</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
+                    <tbody>
+            `;
+            tithes.forEach((t, i) => {
+                html += `<tr>
+                    <td>${t.memberName || 'Unknown'}</td>
+                    <td>$${t.amount}</td>
+                    <td>${t.paymentMethod || 'Cash'}</td>
+                    <td>${t.date || '-'}</td>
+                    <td>${t.type || 'Regular Tithe'}</td>
+                    <td><button class="btn btn-sm btn-danger" onclick="deleteTithe(${i})">✕</button></td>
+                </tr>`;
+            });
+            if (tithes.length === 0) html += '<tr><td colspan="6" class="text-center text-muted">No tithes recorded yet</td></tr>';
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function showAddTithe() {
+            const memberName = prompt('Enter Member Name:');
+            if (!memberName) return;
+            const amount = parseFloat(prompt('Enter Tithe Amount ($):'));
+            if (isNaN(amount)) return;
+            
+            tithes.push({
+                memberName: memberName,
+                amount: amount,
+                paymentMethod: 'Cash',
+                date: new Date().toISOString().split('T')[0],
+                type: 'Regular Tithe'
+            });
+            saveData();
+            loadPage('tithes');
+        }
+
+        function deleteTithe(index) {
+            if (confirm(`Delete tithe of $${tithes[index].amount}?`)) {
+                tithes.splice(index, 1);
+                saveData();
+                loadPage('tithes');
             }
+        }
 
-            function closeModal() {
-                modal.style.display = 'none';
+        // ===== DEPARTURES PAGE =====
+        function getDeparturesPage() {
+            let html = `
+                <button class="btn btn-primary mb-3" onclick="showAddDeparture()">+ Record Departure</button>
+                <table class="table table-striped">
+                    <thead><tr><th>Member</th><th>Departure Date</th><th>Reason</th><th>Can Return?</th><th>Actions</th></tr></thead>
+                    <tbody>
+            `;
+            departures.forEach((d, i) => {
+                html += `<tr>
+                    <td>${d.memberName}</td>
+                    <td>${d.departureDate}</td>
+                    <td>${d.reason || '-'}</td>
+                    <td>${d.canReturn ? '✅' : '❌'}</td>
+                    <td><button class="btn btn-sm btn-danger" onclick="deleteDeparture(${i})">✕</button></td>
+                </tr>`;
+            });
+            if (departures.length === 0) html += '<tr><td colspan="5" class="text-center text-muted">No departures recorded yet</td></tr>';
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function showAddDeparture() {
+            const memberName = prompt('Enter Member Name:');
+            if (!memberName) return;
+            const reason = prompt('Enter Reason for Departure (e.g., Moving, Transfer):');
+            
+            departures.push({
+                memberName: memberName,
+                departureDate: new Date().toISOString().split('T')[0],
+                reason: reason || 'Other',
+                canReturn: confirm('Can this member return? Click OK for Yes, Cancel for No')
+            });
+            saveData();
+            loadPage('departures');
+        }
+
+        function deleteDeparture(index) {
+            if (confirm(`Delete departure record for ${departures[index].memberName}?`)) {
+                departures.splice(index, 1);
+                saveData();
+                loadPage('departures');
             }
+        }
 
-            // modal close handlers
-            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) closeModal();
-            });
+        // ===== REPORTS PAGE =====
+        function getReportsPage() {
+            let totalTithes = tithes.reduce((s, t) => s + t.amount, 0);
+            let active = members.filter(m => m.status === 'Active').length;
+            let departed = departures.length;
 
-            // submit form
-            memberForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const name = nameInput.value.trim();
-                const record = recordInput.value.trim();
-                const date = dateInput.value;
-                const tithing = parseFloat(tithingInput.value) || 0;
-                if (!name || !record || !date) {
-                    alert('Please fill in all required fields.');
-                    return;
-                }
+            return `
+                <div class="row mt-3">
+                    <div class="col-md-4"><div class="card p-3"><h5>📊 Summary</h5>
+                        <p><strong>Total Members:</strong> ${members.length}</p>
+                        <p><strong>Active Members:</strong> ${active}</p>
+                        <p><strong>Departed Members:</strong> ${departed}</p>
+                        <p><strong>Total Tithes:</strong> $${totalTithes.toLocaleString()}</p>
+                        <p><strong>Inventory Items:</strong> ${inventory.length}</p>
+                    </div></div>
+                    <div class="col-md-8">
+                        <div class="card p-3">
+                            <h5>📋 Member Status Breakdown</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Active
+                                    <span class="badge bg-success rounded-pill">${members.filter(m => m.status === 'Active').length}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Inactive
+                                    <span class="badge bg-danger rounded-pill">${members.filter(m => m.status === 'Inactive').length}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    On Leave
+                                    <span class="badge bg-warning rounded-pill">${members.filter(m => m.status === 'On Leave').length}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card p-3 mt-3">
+                            <h5>📋 Departure Reasons</h5>
+                            <ul class="list-group">
+                                ${departures.length === 0 ? '<li class="list-group-item text-muted">No departures recorded</li>' :
+                                    departures.map(d => `<li class="list-group-item d-flex justify-content-between">${d.memberName} <span class="text-muted">${d.reason}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
-                const editIdx = parseInt(editIndexInput.value);
-                if (editIdx >= 0 && editIdx < members.length) {
-                    // edit existing
-                    members[editIdx].name = name;
-                    members[editIdx].record = record;
-                    members[editIdx].date = date;
-                    members[editIdx].tithing = tithing;
-                } else {
-                    // add new
-                    members.push({
-                        id: nextId++,
-                        name: name,
-                        record: record,
-                        date: date,
-                        tithing: tithing,
-                    });
-                }
-                saveToStorage();
-                closeModal();
-                renderTable(document.getElementById('searchInput').value);
-            });
-
-            // ---------- EVENT LISTENERS ----------
-            document.getElementById('addMemberBtn').addEventListener('click', openAddModal);
-
-            document.getElementById('resetDataBtn').addEventListener('click', function() {
-                if (confirm('Reset to default member list? All current data will be lost.')) {
-                    initDefaultData();
-                    // reset nextId from default data
-                    let max = 0;
-                    members.forEach(m => { if (m.id && m.id > max) max = m.id; });
-                    nextId = max + 1;
-                    document.getElementById('searchInput').value = '';
-                    renderTable('');
-                }
-            });
-
-            document.getElementById('searchInput').addEventListener('input', function(e) {
-                renderTable(this.value);
-            });
-
-            // close modal on Escape
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.style.display === 'flex') {
-                    closeModal();
-                }
-            });
-
-            // ---------- INITIAL RENDER ----------
-            renderTable('');
-        })();
+        // ===== INIT =====
+        updateDashboard();
     </script>
 </body>
 </html>
