@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Members Inventory</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: #f0f5fb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .app-container {
+            max-width: 1300px;
+            width: 100%;
+            background: white;
+            border-radius: 36px;
+            box-shadow: 0 20px 40px rgba(0, 20, 40, 0.10);
+            padding: 2rem 1.8rem;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #1a2b3c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.2rem;
+        }
+        h1 i {
+            color: #2a5f7a;
+            font-size: 2.2rem;
+        }
+        .subhead {
+            color: #4a5f73;
+            margin-bottom: 2rem;
+            border-left: 4px solid #2a5f7a;
+            padding-left: 16px;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 2rem;
+            background: #f0f6fd;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            flex: 1 1 260px;
+        }
+        .search-box i {
+            color: #6f8aa3;
+            margin-right: 10px;
+        }
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 10px 0;
+            width: 100%;
+            font-size: 1rem;
+            background: transparent;
+        }
+        .btn {
+            border: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.15s;
+            background: #e9eff6;
+            color: #1a2b3c;
+        }
+        .btn-primary {
+            background: #1f4462;
+            color: white;
+            box-shadow: 0 4px 8px rgba(31, 68, 98, 0.25);
+            border: 1px solid #16364e;
+        }
+        .btn-primary:hover {
+            background: #15344e;
+            transform: scale(0.97);
+        }
+        .btn-success {
+            background: #1d6b47;
+            color: white;
+            border: 1px solid #15573a;
+        }
+        .btn-success:hover {
+            background: #15573a;
+        }
+        .btn-danger {
+            background: #b13e3e;
+            color: white;
+            border: 1px solid #952f2f;
+        }
+        .btn-danger:hover {
+            background: #9a3232;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #b6c9db;
+            color: #1f3b57;
+        }
+        .btn-outline:hover {
+            background: #e6edf5;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 20px;
+            border: 1px solid #e3eaf2;
+            background: white;
+            margin-top: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 600px;
+        }
+        th {
+            background: #e9eff6;
+            color: #1f3b57;
+            font-weight: 600;
+            padding: 1rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid #d0ddee;
+        }
+        td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid #e7edf5;
+            vertical-align: middle;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: #f8fafd;
+        }
+        .member-actions i {
+            margin: 0 5px;
+            cursor: pointer;
+            color: #4d6f8f;
+            font-size: 1.1rem;
+            transition: 0.1s;
+        }
+        .member-actions i:hover {
+            color: #1a2b3c;
+            transform: scale(1.15);
+        }
+        .badge-tith {
+            background: #d4e2d9;
+            color: #1b5a39;
+            font-weight: 500;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 0.8rem;
+        }
+        .badge-tith.high {
+            background: #c7dccf;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #5b738b;
+        }
+        .empty-state i {
+            font-size: 3.5rem;
+            opacity: 0.4;
+            margin-bottom: 12px;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            border-radius: 40px;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            animation: fadeSlide 0.2s ease;
+        }
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .modal-card h2 {
+            margin-bottom: 1.8rem;
+            color: #1a2b3c;
+            font-weight: 500;
+        }
+        .modal-card label {
+            font-weight: 500;
+            color: #1f3b57;
+            display: block;
+            margin: 0.8rem 0 0.2rem;
+        }
+        .modal-card input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #cfddee;
+            border-radius: 40px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.15s;
+        }
+        .modal-card input:focus {
+            border-color: #1f4462;
+            box-shadow: 0 0 0 3px rgba(31,68,98,0.15);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 14px;
+            margin-top: 2rem;
+            justify-content: flex-end;
+        }
+        .modal-actions .btn {
+            min-width: 100px;
+            justify-content: center;
+        }
+        .btn-close-modal {
+            background: #dbe3ec;
+        }
+        .btn-close-modal:hover {
+            background: #c9d3e0;
+        }
+        .footer-info {
+            margin-top: 1.8rem;
+            font-size: 0.85rem;
+            color: #5f7a94;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            border-top: 1px solid #dce5ef;
+            padding-top: 1.5rem;
+        }
+        .footer-info span i {
+            margin-right: 5px;
+        }
+        .inline-icon {
+            margin-right: 6px;
+        }
+        @media (max-width: 700px) {
+            .app-container { padding: 1.2rem; }
+            .toolbar { flex-direction: column; align-items: stretch; border-radius: 30px; }
+            .search-box { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1><i class="fas fa-church"></i> Church Inventory</h1>
+        <div class="subhead"><i class="fas fa-users" style="margin-right: 12px;"></i> Members · Tithing records · Join dates</div>
+
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by name or record...">
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add Member</button>
+                <button class="btn btn-outline" id="resetDataBtn"><i class="fas fa-undo-alt"></i> Reset</button>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="memberTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Record / ID</th>
+                        <th>Date Joined</th>
+                        <th>Tithing</th>
+                        <th style="text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- dynamic rows -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-info">
+            <span><i class="fas fa-database"></i> <span id="memberCount">0</span> members</span>
+            <span><i class="fas fa-check-circle" style="color: #1d6b47;"></i> Data saved in your browser</span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="memberModal">
+        <div class="modal-card">
+            <h2 id="modalTitle"><i class="fas fa-user-plus" style="margin-right: 10px;"></i> Add Member</h2>
+            <form id="memberForm">
+                <label for="nameInput"><i class="fas fa-user"></i> Full Name</label>
+                <input type="text" id="nameInput" placeholder="e.g. Sarah Johnson" required>
+
+                <label for="recordInput"><i class="fas fa-id-card"></i> Record / ID</label>
+                <input type="text" id="recordInput" placeholder="e.g. M-1024 or 2026-07" required>
+
+                <label for="dateInput"><i class="fas fa-calendar-alt"></i> Date Joined</label>
+                <input type="date" id="dateInput" required>
+
+                <label for="tithingInput"><i class="fas fa-coins"></i> Tithing (USD)</label>
+                <input type="number" id="tithingInput" placeholder="0.00" step="0.01" min="0" value="0.00">
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-close-modal" id="closeModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-success" id="saveMemberBtn"><i class="fas fa-save"></i> Save</button>
+                </div>
+                <input type="hidden" id="editIndex" value="-1">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- DATA ----------
+            let members = [];
+            let nextId = 1;
+
+            // Load from localStorage
+            function loadFromStorage() {
+                const stored = localStorage.getItem('churchMembersData');
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed) && parsed.length) {
+                            members = parsed;
+                            // find max id for nextId
+                            let max = 0;
+                            members.forEach(m => { if (m.id && m.id > max) max = m.id; });
+                            nextId = max + 1;
+                            return true;
+                        }
+                    } catch (e) {}
+                }
+                return false;
+            }
+
+            // save to localStorage
+            function saveToStorage() {
+                localStorage.setItem('churchMembersData', JSON.stringify(members));
+            }
+
+            // ---------- DEFAULT DATA (if no storage) ----------
+            function initDefaultData() {
+                members = [
+                    { id: nextId++, name: 'Michael Roberts', record: 'M-1024', date: '2023-09-15', tithing: 320.50 },
+                    { id: nextId++, name: 'Grace Kimani', record: 'G-2105', date: '2022-11-02', tithing: 150.00 },
+                    { id: nextId++, name: 'James Oduya', record: 'J-9876', date: '2024-01-20', tithing: 210.75 },
+                    { id: nextId++, name: 'Elizabeth Mwangi', record: 'E-4523', date: '2023-06-10', tithing: 85.30 },
+                    { id: nextId++, name: 'David Njoroge', record: 'D-6654', date: '2024-08-30', tithing: 470.00 },
+                ];
+                saveToStorage();
+            }
+
+            // load or init
+            if (!loadFromStorage()) {
+                initDefaultData();
+            }
+
+            // ---------- RENDER ----------
+            function renderTable(filter = '') {
+                const tbody = document.getElementById('tableBody');
+                const searchTerm = filter.trim().toLowerCase();
+                let filtered = members;
+                if (searchTerm) {
+                    filtered = members.filter(m => 
+                        m.name.toLowerCase().includes(searchTerm) ||
+                        m.record.toLowerCase().includes(searchTerm)
+                    );
+                }
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `
+                        <tr><td colspan="5">
+                            <div class="empty-state">
+                                <i class="fas fa-people-arrows"></i>
+                                <p>${members.length === 0 ? 'No members yet. Add one!' : 'No matching members found.'}</p>
+                            </div>
+                        </td></tr>
+                    `;
+                } else {
+                    tbody.innerHTML = filtered.map((m, idx) => {
+                        const realIndex = members.indexOf(m); // to use for edit/delete
+                        return `
+                            <tr>
+                                <td><i class="fas fa-user-circle" style="margin-right: 8px; color: #2a5f7a;"></i>${m.name}</td>
+                                <td><span style="background: #eef3f9; padding: 0.2rem 0.9rem; border-radius: 20px;">${m.record}</span></td>
+                                <td><i class="far fa-calendar-alt" style="margin-right: 6px; color: #4d6f8f;"></i>${m.date}</td>
+                                <td><span class="badge-tith ${m.tithing > 200 ? 'high' : ''}"><i class="fas fa-dollar-sign" style="font-size: 0.7rem;"></i> ${m.tithing.toFixed(2)}</span></td>
+                                <td class="member-actions" style="text-align: center;">
+                                    <i class="fas fa-edit" data-action="edit" data-index="${realIndex}" title="Edit"></i>
+                                    <i class="fas fa-trash-alt" data-action="delete" data-index="${realIndex}" title="Remove" style="color: #b13e3e;"></i>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                // update member count
+                document.getElementById('memberCount').textContent = members.length;
+
+                // attach event listeners to action icons
+                document.querySelectorAll('[data-action="edit"]').forEach(el => {
+                    el.addEventListener('click', function(e) {
+                        const idx = parseInt(this.dataset.index);
+                        openEditModal(idx);
+                    });
+                });
+                document.querySelectorAll('[data-action="delete"]').forEach(el => {
+                    el.addEventListener('click', function(e) {
+                        const idx = parseInt(this.dataset.index);
+                        if (confirm(`Delete member "${members[idx].name}" ?`)) {
+                            members.splice(idx, 1);
+                            saveToStorage();
+                            renderTable(document.getElementById('searchInput').value);
+                        }
+                    });
+                });
+            }
+
+            // ---------- MODAL ----------
+            const modal = document.getElementById('memberModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const nameInput = document.getElementById('nameInput');
+            const recordInput = document.getElementById('recordInput');
+            const dateInput = document.getElementById('dateInput');
+            const tithingInput = document.getElementById('tithingInput');
+            const editIndexInput = document.getElementById('editIndex');
+            const memberForm = document.getElementById('memberForm');
+
+            function openAddModal() {
+                modalTitle.innerHTML = '<i class="fas fa-user-plus" style="margin-right: 10px;"></i> Add Member';
+                nameInput.value = '';
+                recordInput.value = '';
+                dateInput.value = '';
+                tithingInput.value = '0.00';
+                editIndexInput.value = '-1';
+                modal.style.display = 'flex';
+                nameInput.focus();
+            }
+
+            function openEditModal(index) {
+                const m = members[index];
+                if (!m) return;
+                modalTitle.innerHTML = '<i class="fas fa-user-edit" style="margin-right: 10px;"></i> Edit Member';
+                nameInput.value = m.name;
+                recordInput.value = m.record;
+                dateInput.value = m.date;
+                tithingInput.value = m.tithing;
+                editIndexInput.value = index;
+                modal.style.display = 'flex';
+                nameInput.focus();
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            // modal close handlers
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+
+            // submit form
+            memberForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = nameInput.value.trim();
+                const record = recordInput.value.trim();
+                const date = dateInput.value;
+                const tithing = parseFloat(tithingInput.value) || 0;
+                if (!name || !record || !date) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                const editIdx = parseInt(editIndexInput.value);
+                if (editIdx >= 0 && editIdx < members.length) {
+                    // edit existing
+                    members[editIdx].name = name;
+                    members[editIdx].record = record;
+                    members[editIdx].date = date;
+                    members[editIdx].tithing = tithing;
+                } else {
+                    // add new
+                    members.push({
+                        id: nextId++,
+                        name: name,
+                        record: record,
+                        date: date,
+                        tithing: tithing,
+                    });
+                }
+                saveToStorage();
+                closeModal();
+                renderTable(document.getElementById('searchInput').value);
+            });
+
+            // ---------- EVENT LISTENERS ----------
+            document.getElementById('addMemberBtn').addEventListener('click', openAddModal);
+
+            document.getElementById('resetDataBtn').addEventListener('click', function() {
+                if (confirm('Reset to default member list? All current data will be lost.')) {
+                    initDefaultData();
+                    // reset nextId from default data
+                    let max = 0;
+                    members.forEach(m => { if (m.id && m.id > max) max = m.id; });
+                    nextId = max + 1;
+                    document.getElementById('searchInput').value = '';
+                    renderTable('');
+                }
+            });
+
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                renderTable(this.value);
+            });
+
+            // close modal on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+
+            // ---------- INITIAL RENDER ----------
+            renderTable('');
+        })();
+    </script>
+</body>
+</html>
