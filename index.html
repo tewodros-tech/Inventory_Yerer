@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>⛪ ግሎሪ ቤተክርስቲያን · አባላት አስተዳደር</title>
+    <title>⛪ Yerer Full Gospel · Member Management</title>
     <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Font: Inter + Playfair Display -->
@@ -117,6 +117,7 @@
             margin: 3px 0;
             font-size: 0.95rem;
             position: relative;
+            cursor: pointer;
         }
 
         .sidebar-nav a i {
@@ -241,6 +242,17 @@
         .btn-outline {
             background: transparent;
             border: 1px solid #dce6f0;
+        }
+
+        .btn-danger-outline {
+            background: transparent;
+            border: 1px solid #e0c0c0;
+            color: #b13e3e;
+        }
+
+        .btn-danger-outline:hover {
+            background: #fdf0f0;
+            border-color: #b13e3e;
         }
 
         /* stats */
@@ -656,6 +668,36 @@
             box-shadow: 0 10px 28px rgba(29, 107, 71, 0.35);
         }
 
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0b1f2f;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast i {
+            color: #f7d44a;
+            font-size: 1.2rem;
+        }
+
         /* responsive */
         @media (max-width: 1024px) {
             .sidebar { width: 100px; padding: 1.2rem 0.6rem; }
@@ -688,24 +730,24 @@
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <img src="logo.jpg" alt="የቤተክርስቲያን አርማ" class="brand-logo" />
+            <img src="logo.jpg" alt="Yerer Full Gospel Logo" class="brand-logo" />
             <div class="brand-text">
-                ግሎሪ ቤተክርስቲያን
-                <small>⛪ ጸጋ እና እውነት</small>
+                Yerer Full Gospel
+                <small>⛪ Grace &amp; Truth</small>
             </div>
         </div>
         <nav class="sidebar-nav">
-            <div class="nav-label">ዋና</div>
-            <a href="#" class="active"><i class="fas fa-home"></i><span>ዳሽቦርድ</span></a>
-            <a href="#"><i class="fas fa-users"></i><span>አባላት</span><span class="badge" id="memberBadge">0</span></a>
-            <a href="#"><i class="fas fa-boxes"></i><span>እቃዎች</span></a>
-            <a href="#"><i class="fas fa-coins"></i><span>አስራኝ</span><span class="badge">$</span></a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i><span>የወጡ</span></a>
-            <div class="nav-label" style="margin-top:1.8rem;">ትንታኔ</div>
-            <a href="#"><i class="fas fa-chart-pie"></i><span>ሪፖርቶች</span></a>
+            <div class="nav-label">Main</div>
+            <a href="#" class="active"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            <a href="#"><i class="fas fa-users"></i><span>Members</span><span class="badge" id="memberBadge">0</span></a>
+            <a href="#"><i class="fas fa-boxes"></i><span>Inventory</span></a>
+            <a href="#"><i class="fas fa-coins"></i><span>Tithes</span><span class="badge">$</span></a>
+            <a href="#"><i class="fas fa-sign-out-alt"></i><span>Departures</span></a>
+            <div class="nav-label" style="margin-top:1.8rem;">Analytics</div>
+            <a href="#"><i class="fas fa-chart-pie"></i><span>Reports</span></a>
         </nav>
         <div class="sidebar-footer">
-            <span><i class="fas fa-cog"></i> ስሪት 3.0</span>
+            <span><i class="fas fa-cog"></i> v3.0</span>
             <span><i class="fas fa-calendar-alt"></i> 2026</span>
         </div>
     </aside>
@@ -714,12 +756,12 @@
     <main class="main-content">
         <div class="top-bar">
             <div class="page-title">
-                <h1>👥 አባላት</h1>
-                <p>ቤተክርስቲያንዎን በጸጋ እና በልጅነት ያስተዳድሩ</p>
+                <h1>👥 Members</h1>
+                <p>Manage your church family with grace &amp; excellence</p>
             </div>
             <div class="top-actions">
-                <button class="btn btn-outline" id="resetDemoBtn"><i class="fas fa-sync-alt"></i> ዳግም አስጀምር</button>
-                <button class="btn btn-glow" id="addMemberBtn"><i class="fas fa-plus-circle"></i> አባል ጨምር</button>
+                <button class="btn btn-outline" id="resetDemoBtn"><i class="fas fa-sync-alt"></i> Reset</button>
+                <button class="btn btn-glow" id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add Member</button>
             </div>
         </div>
 
@@ -728,49 +770,49 @@
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div class="stat-number" id="totalMembers">0</div>
-                <div class="stat-label">ጠቅላላ አባላት</div>
-                <div class="stat-change"><i class="fas fa-arrow-up"></i> በዚህ ሳምንት +2</div>
+                <div class="stat-label">Total Members</div>
+                <div class="stat-change"><i class="fas fa-arrow-up"></i> +2 this week</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-user-check"></i></div>
                 <div class="stat-number" id="activeMembers">0</div>
-                <div class="stat-label">ንቁ</div>
+                <div class="stat-label">Active</div>
                 <div class="stat-change" style="background:#e3edf5; color:#1f4462;"><i class="fas fa-arrow-up"></i> 82%</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-calendar-plus"></i></div>
                 <div class="stat-number" id="newThisMonth">0</div>
-                <div class="stat-label">በዚህ ወር የተቀላቀሉ</div>
-                <div class="stat-change"><i class="fas fa-arrow-up"></i> እያደገ</div>
+                <div class="stat-label">Joined This Month</div>
+                <div class="stat-change"><i class="fas fa-arrow-up"></i> growing</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-coins"></i></div>
                 <div class="stat-number" id="totalTithing">$0</div>
-                <div class="stat-label">ጠቅላላ አስራኝ</div>
-                <div class="stat-change" style="background:#f7f0d0; color:#a07c1a;"><i class="fas fa-gift"></i> ታማኝ</div>
+                <div class="stat-label">Total Tithes</div>
+                <div class="stat-change" style="background:#f7f0d0; color:#a07c1a;"><i class="fas fa-gift"></i> faithful</div>
             </div>
         </div>
 
         <!-- table -->
         <div class="table-card">
             <div class="table-header">
-                <h3><i class="fas fa-list-ul"></i> የአባላት ዝርዝር</h3>
+                <h3><i class="fas fa-list-ul"></i> Member Directory</h3>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="ስም፣ ስልክ፣ አገልግሎት ፈልግ..." />
+                    <input type="text" id="searchInput" placeholder="Search name, phone, service..." />
                 </div>
             </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>አባል</th>
-                            <th>ዕድሜ</th>
-                            <th>ስልክ</th>
-                            <th>የተቀላቀሉበት</th>
-                            <th>አገልግሎቶች</th>
-                            <th>ሁኔታ</th>
-                            <th style="text-align:center;">ሥራዎች</th>
+                            <th>Member</th>
+                            <th>Age</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                            <th>Services</th>
+                            <th>Status</th>
+                            <th style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
@@ -782,76 +824,82 @@
     <!-- ===== ENHANCED MODAL ===== -->
     <div class="modal" id="memberModal">
         <div class="modal-card">
-            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> አባል ጨምር</h2>
+            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Add Member</h2>
             <form id="memberForm" enctype="multipart/form-data">
                 <!-- Photo Upload -->
-                <label>የፎቶ መገለጫ</label>
+                <label>Profile Photo</label>
                 <div class="photo-upload">
-                    <img id="photoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Ccircle cx='35' cy='35' r='35' fill='%23dce6f0'/%3E%3Ctext x='35' y='42' text-anchor='middle' fill='%236f8aa3' font-size='28' font-family='FontAwesome'%3E%3C/text%3E%3C/svg%3E" alt="ቅድመ እይታ" class="photo-preview" />
+                    <img id="photoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Ccircle cx='35' cy='35' r='35' fill='%23dce6f0'/%3E%3Ctext x='35' y='42' text-anchor='middle' fill='%236f8aa3' font-size='28' font-family='FontAwesome'%3E%3C/text%3E%3C/svg%3E" alt="Preview" class="photo-preview" />
                     <input type="file" id="photoInput" accept="image/*" />
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label for="nameInput">ሙሉ ስም *</label>
-                        <input type="text" id="nameInput" placeholder="ለምሳሌ ግሬስ ኦዱያ" required />
+                        <label for="nameInput">Full Name *</label>
+                        <input type="text" id="nameInput" placeholder="e.g. Grace Oduya" required />
                     </div>
                     <div>
-                        <label for="ageInput">ዕድሜ *</label>
+                        <label for="ageInput">Age *</label>
                         <input type="number" id="ageInput" placeholder="34" min="1" required />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label for="phoneInput">ስልክ *</label>
+                        <label for="phoneInput">Phone *</label>
                         <input type="text" id="phoneInput" placeholder="+1 234 567 890" required />
                     </div>
                     <div>
-                        <label for="emailInput">ኢሜይል</label>
+                        <label for="emailInput">Email</label>
                         <input type="email" id="emailInput" placeholder="grace@church.org" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label for="dateInput">የተቀላቀሉበት ቀን *</label>
+                        <label for="dateInput">Registration Date *</label>
                         <input type="date" id="dateInput" required />
                     </div>
                     <div>
-                        <label for="statusSelect">ሁኔታ</label>
+                        <label for="statusSelect">Status</label>
                         <select id="statusSelect">
-                            <option value="Active">ንቁ</option>
-                            <option value="Inactive">እንቅስቃሴ የሌለ</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label for="tithingInput">አስራኝ (ዶላር)</label>
+                        <label for="tithingInput">Tithes (USD)</label>
                         <input type="number" id="tithingInput" placeholder="0.00" step="0.01" min="0" value="0" />
                     </div>
                     <div>
-                        <label for="occupationInput">ሥራ</label>
-                        <input type="text" id="occupationInput" placeholder="ለምሳሌ መምህር" />
+                        <label for="occupationInput">Occupation</label>
+                        <input type="text" id="occupationInput" placeholder="e.g. Teacher" />
                     </div>
                 </div>
 
-                <label for="servicesInput">የተሳተፉባቸው አገልግሎቶች</label>
-                <input type="text" id="servicesInput" placeholder="ለምሳሌ መዘምራን፣ አስተናጋጅ፣ ወጣቶች፣ ሚዲያ" />
+                <label for="servicesInput">Services Involved In</label>
+                <input type="text" id="servicesInput" placeholder="e.g. Choir, Usher, Youth, Media" />
 
-                <label for="notesInput">ማስታወሻ / ልዩ ስጦታዎች</label>
-                <textarea id="notesInput" placeholder="ማንኛውም ተጨማሪ መረጃ..."></textarea>
+                <label for="notesInput">Notes / Special Gifts</label>
+                <textarea id="notesInput" placeholder="Any additional information..."></textarea>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-ghost" id="closeModalBtn">ሰርዝ</button>
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> አስቀምጥ</button>
+                    <button type="button" class="btn btn-ghost" id="closeModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
                 </div>
                 <input type="hidden" id="editIndex" value="-1" />
                 <input type="hidden" id="photoData" value="" />
             </form>
         </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Member saved successfully!</span>
     </div>
 
     <script>
@@ -860,90 +908,90 @@
             let members = [];
             let nextId = 1;
 
-            // Default members with extended fields (Amharic names)
+            // Default members with extended fields
             const defaultMembers = [{
                 id: 1,
-                name: 'ሜሪ ጆንሰን',
+                name: 'Mary Johnson',
                 age: 34,
                 phone: '+1 234 567 890',
-                email: 'mary@church.org',
+                email: 'mary@yererchurch.org',
                 date: '2026-07-06',
                 status: 'Active',
                 tithing: 320,
-                occupation: 'ነርስ',
-                services: 'መዘምራን, አስተናጋጅ',
-                notes: 'ፒያኖ ትጫወታለች',
+                occupation: 'Nurse',
+                services: 'Choir, Usher',
+                notes: 'Plays piano',
                 photo: ''
             }, {
                 id: 2,
-                name: 'ጆን ምዋንጊ',
+                name: 'John Mwangi',
                 age: 28,
                 phone: '+254 712 345 678',
-                email: 'john@church.org',
+                email: 'john@yererchurch.org',
                 date: '2026-06-15',
                 status: 'Active',
                 tithing: 150,
-                occupation: 'መሐንዲስ',
-                services: 'ወጣቶች, ሚዲያ',
-                notes: 'የቴክኖሎጂ ድጋፍ',
+                occupation: 'Engineer',
+                services: 'Youth, Media',
+                notes: 'Tech support',
                 photo: ''
             }, {
                 id: 3,
-                name: 'ግሬስ ኦዱያ',
+                name: 'Grace Oduya',
                 age: 41,
                 phone: '+1 987 654 321',
-                email: 'grace@church.org',
+                email: 'grace@yererchurch.org',
                 date: '2026-05-20',
                 status: 'Active',
                 tithing: 210,
-                occupation: 'መምህር',
-                services: 'ሕፃናት, መዘምራን',
-                notes: 'የሕፃናት አገልግሎት መሪ',
+                occupation: 'Teacher',
+                services: 'Children, Choir',
+                notes: 'Leads children ministry',
                 photo: ''
             }, {
                 id: 4,
-                name: 'ዳዊት ኪማኒ',
+                name: 'David Kimani',
                 age: 55,
                 phone: '+254 722 111 222',
-                email: 'david@church.org',
+                email: 'david@yererchurch.org',
                 date: '2026-04-02',
                 status: 'Inactive',
                 tithing: 0,
-                occupation: 'ጡረታ',
-                services: 'ሽማግሌ, ጸሎት',
-                notes: 'ወደ ሌላ ከተማ እየተዛወረ',
+                occupation: 'Retired',
+                services: 'Elder, Prayer',
+                notes: 'Moving to another city',
                 photo: ''
             }, {
                 id: 5,
-                name: 'ሳራ ንጆሮጌ',
+                name: 'Sarah Njoroge',
                 age: 29,
                 phone: '+1 456 789 012',
-                email: 'sarah@church.org',
+                email: 'sarah@yererchurch.org',
                 date: '2026-07-01',
                 status: 'Active',
                 tithing: 180,
-                occupation: 'ዲዛይነር',
-                services: 'አምልኮ, ሚዲያ',
-                notes: 'ግራፊክ ዲዛይነር',
+                occupation: 'Designer',
+                services: 'Worship, Media',
+                notes: 'Graphic designer',
                 photo: ''
             }, {
                 id: 6,
-                name: 'ሚካኤል ሮበርትስ',
+                name: 'Michael Roberts',
                 age: 47,
                 phone: '+44 20 7946 0958',
-                email: 'michael@church.org',
+                email: 'michael@yererchurch.org',
                 date: '2026-03-12',
                 status: 'Active',
                 tithing: 420,
-                occupation: 'ፓስተር',
-                services: 'ማስተማር, ምክር',
-                notes: 'ረዳት ፓስተር',
+                occupation: 'Pastor',
+                services: 'Teaching, Counseling',
+                notes: 'Associate pastor',
                 photo: ''
             }, ];
 
             // ---------- STORAGE ----------
             function loadFromStorage() {
-                const stored = localStorage.getItem('gloryChurchMembersAmharic');
+                const stored = localStorage.getItem('yererChurchMembers');
                 if (stored) {
                     try {
                         const parsed = JSON.parse(stored);
@@ -960,7 +1008,7 @@
             }
 
             function saveToStorage() {
-                localStorage.setItem('gloryChurchMembersAmharic', JSON.stringify(members));
+                localStorage.setItem('yererChurchMembers', JSON.stringify(members));
             }
 
             function initDefaultData() {
@@ -969,10 +1017,25 @@
                 members.forEach(m => { if (m.id && m.id > max) max = m.id; });
                 nextId = max + 1;
                 saveToStorage();
+                showToast('Default data loaded successfully!');
             }
 
             if (!loadFromStorage()) {
                 initDefaultData();
+            }
+
+            // ---------- TOAST ----------
+            let toastTimeout;
+
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                const toastMsg = document.getElementById('toastMessage');
+                toastMsg.textContent = message;
+                toast.classList.add('show');
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
             }
 
             // ---------- RENDER ----------
@@ -991,7 +1054,7 @@
 
                 if (filtered.length === 0) {
                     tbody.innerHTML =
-                        `<tr class="empty-row"><td colspan="7"><i class="fas fa-people-arrows"></i> ምንም አባላት አልተገኙም</td></tr>`;
+                        `<tr class="empty-row"><td colspan="7"><i class="fas fa-people-arrows"></i> No members found</td></tr>`;
                 } else {
                     tbody.innerHTML = filtered.map((m, idx) => {
                         const realIndex = members.indexOf(m);
@@ -1004,8 +1067,6 @@
                             servicesHtml = tags.map(t => `<span class="services-tag">${t}</span>`).join(' ');
                         }
 
-                        const statusText = m.status === 'Active' ? 'ንቁ' : 'እንቅስቃሴ የሌለ';
-
                         return `
                             <tr>
                                 <td>
@@ -1016,10 +1077,10 @@
                                 <td>${m.phone}</td>
                                 <td>${m.date}</td>
                                 <td>${servicesHtml || '—'}</td>
-                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                                <td><span class="status-badge ${statusClass}">${m.status}</span></td>
                                 <td style="text-align:center;" class="action-icons">
-                                    <i class="fas fa-edit" data-action="edit" data-index="${realIndex}" title="አርትዕ"></i>
-                                    <i class="fas fa-trash-alt" data-action="delete" data-index="${realIndex}" title="አጥፋ"></i>
+                                    <i class="fas fa-edit" data-action="edit" data-index="${realIndex}" title="Edit"></i>
+                                    <i class="fas fa-trash-alt" data-action="delete" data-index="${realIndex}" title="Delete"></i>
                                 </td>
                             </tr>
                         `;
@@ -1054,10 +1115,12 @@
                 document.querySelectorAll('[data-action="delete"]').forEach(el => {
                     el.addEventListener('click', function() {
                         const idx = parseInt(this.dataset.index);
-                        if (confirm(`"${members[idx].name}"ን ከቤተክርስቲያን ዝርዝር ላይ ማስወገድ ይፈልጋሉ?`)) {
+                        if (confirm(`Remove "${members[idx].name}" from the church roll?`)) {
+                            const name = members[idx].name;
                             members.splice(idx, 1);
                             saveToStorage();
                             renderTable(document.getElementById('searchInput').value);
+                            showToast(`"${name}" removed successfully`);
                         }
                     });
                 });
@@ -1114,7 +1177,7 @@
             }
 
             function openAddModal() {
-                modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> አባል ጨምር';
+                modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Add Member';
                 resetForm();
                 modal.style.display = 'flex';
                 nameInput.focus();
@@ -1123,7 +1186,7 @@
             function openEditModal(index) {
                 const m = members[index];
                 if (!m) return;
-                modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> አባል አርትዕ';
+                modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Edit Member';
                 nameInput.value = m.name || '';
                 ageInput.value = m.age || '';
                 phoneInput.value = m.phone || '';
@@ -1167,11 +1230,12 @@
                 const photo = photoData.value || '';
 
                 if (!name || !age || !phone || !date) {
-                    alert('እባክዎ ሁሉንም አስፈላጊ መስኮች ይሙሉ (ስም፣ ዕድሜ፣ ስልክ፣ ቀን)።');
+                    alert('Please fill in all required fields (Name, Age, Phone, Date).');
                     return;
                 }
 
                 const editIdx = parseInt(editIndexInput.value);
+                let action = '';
                 if (editIdx >= 0 && editIdx < members.length) {
                     members[editIdx].name = name;
                     members[editIdx].age = age;
@@ -1184,6 +1248,7 @@
                     members[editIdx].services = services;
                     members[editIdx].notes = notes;
                     if (photo) members[editIdx].photo = photo;
+                    action = 'updated';
                 } else {
                     members.push({
                         id: nextId++,
@@ -1199,17 +1264,19 @@
                         notes,
                         photo
                     });
+                    action = 'added';
                 }
                 saveToStorage();
                 closeModal();
                 renderTable(document.getElementById('searchInput').value);
+                showToast(`Member "${name}" ${action} successfully!`);
             });
 
             // ---------- EVENTS ----------
             document.getElementById('addMemberBtn').addEventListener('click', openAddModal);
 
             document.getElementById('resetDemoBtn').addEventListener('click', function() {
-                if (confirm('ወደ ነባሪ የአባላት ዝርዝር ይመለሳሉ? ሁሉም የአሁኑ መረጃ ይጠፋል።')) {
+                if (confirm('Reset to default member list? All current data will be lost.')) {
                     initDefaultData();
                     document.getElementById('searchInput').value = '';
                     renderTable('');
