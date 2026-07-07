@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>⛪ Glory Church · Management</title>
+    <title>⛪ Glory Church · Member Management</title>
     <!-- Font Awesome 6 (Free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <!-- Google Font: Inter + Playfair Display -->
@@ -54,7 +54,6 @@
             margin-bottom: 2rem;
         }
 
-        /* ----- CUSTOM LOGO IMAGE ----- */
         .sidebar-brand .brand-logo {
             width: 58px;
             height: 58px;
@@ -64,7 +63,7 @@
             box-shadow: 0 0 24px rgba(247, 212, 74, 0.15);
             flex-shrink: 0;
             transition: all 0.3s ease;
-            background: #1f3b57; /* fallback if image missing */
+            background: #1f3b57;
         }
 
         .sidebar-brand .brand-logo:hover {
@@ -175,7 +174,6 @@
             max-width: calc(100% - 290px);
         }
 
-        /* top bar */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -228,18 +226,6 @@
             box-shadow: 0 12px 28px rgba(0, 20, 40, 0.12);
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #1f4462, #2a5f7a);
-            color: white;
-            border: none;
-            box-shadow: 0 8px 24px rgba(31, 68, 98, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #14344b, #1f4a63);
-            box-shadow: 0 12px 32px rgba(31, 68, 98, 0.4);
-        }
-
         .btn-glow {
             background: linear-gradient(135deg, #f7d44a, #f0b830);
             color: #0b1f2f;
@@ -250,6 +236,11 @@
         .btn-glow:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 14px 34px rgba(247, 212, 74, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #dce6f0;
         }
 
         /* stats */
@@ -326,7 +317,7 @@
             margin-top: 6px;
         }
 
-        /* table card — glass */
+        /* table card */
         .table-card {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
@@ -394,7 +385,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.93rem;
+            font-size: 0.9rem;
         }
 
         th {
@@ -403,13 +394,13 @@
             font-weight: 600;
             color: #1f3b57;
             border-bottom: 2px solid rgba(0, 0, 0, 0.04);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         td {
-            padding: 1rem 0.6rem;
+            padding: 0.9rem 0.6rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.03);
             vertical-align: middle;
             color: #1a2f40;
@@ -421,6 +412,17 @@
 
         tr:hover td {
             background: rgba(247, 212, 74, 0.04);
+        }
+
+        .member-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(31, 68, 98, 0.15);
+            vertical-align: middle;
+            margin-right: 10px;
+            background: #dce6f0;
         }
 
         .status-badge {
@@ -440,7 +442,7 @@
         }
 
         .action-icons i {
-            margin: 0 6px;
+            margin: 0 5px;
             color: #4f6f89;
             cursor: pointer;
             font-size: 1rem;
@@ -474,7 +476,17 @@
             margin-bottom: 12px;
         }
 
-        /* ===== MODAL ===== */
+        .services-tag {
+            display: inline-block;
+            background: rgba(31, 68, 98, 0.08);
+            padding: 0.1rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            margin: 2px 2px;
+            color: #1f4462;
+        }
+
+        /* ===== ENHANCED MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -489,6 +501,7 @@
             align-items: center;
             z-index: 2000;
             animation: fadeIn 0.25s ease;
+            padding: 1rem;
         }
 
         @keyframes fadeIn {
@@ -497,14 +510,27 @@
         }
 
         .modal-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.97);
             backdrop-filter: blur(16px);
             border-radius: 48px;
-            padding: 2.8rem 2.5rem;
+            padding: 2.5rem 2.5rem;
             width: 100%;
-            max-width: 500px;
+            max-width: 620px;
+            max-height: 90vh;
+            overflow-y: auto;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
             animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal-card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal-card::-webkit-scrollbar-thumb {
+            background: #c0d0e0;
+            border-radius: 20px;
         }
 
         @keyframes slideUp {
@@ -518,39 +544,88 @@
             font-size: 1.8rem;
             margin-bottom: 1.8rem;
             font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-card h2 i {
+            color: #f7d44a;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .form-row .full-width {
+            grid-column: 1 / -1;
         }
 
         .modal-card label {
             font-weight: 600;
             color: #1f3b57;
             display: block;
-            margin: 0.9rem 0 0.3rem;
-            font-size: 0.9rem;
+            margin: 0.7rem 0 0.25rem;
+            font-size: 0.85rem;
         }
 
         .modal-card input,
-        .modal-card select {
+        .modal-card select,
+        .modal-card textarea {
             width: 100%;
-            padding: 0.9rem 1.2rem;
+            padding: 0.8rem 1.2rem;
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: 40px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             background: rgba(255, 255, 255, 0.8);
             transition: 0.2s;
         }
 
+        .modal-card textarea {
+            border-radius: 20px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
         .modal-card input:focus,
-        .modal-card select:focus {
+        .modal-card select:focus,
+        .modal-card textarea:focus {
             border-color: #f7d44a;
-            box-shadow: 0 0 0 4px rgba(247, 212, 74, 0.15);
+            box-shadow: 0 0 0 4px rgba(247, 212, 74, 0.12);
+        }
+
+        .photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 0.5rem 0;
+        }
+
+        .photo-upload .photo-preview {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #dce6f0;
+            background: #eef3f9;
+        }
+
+        .photo-upload input[type="file"] {
+            padding: 0.6rem 0;
+            border: none;
+            background: transparent;
         }
 
         .modal-actions {
             display: flex;
             gap: 14px;
-            margin-top: 2.2rem;
+            margin-top: 2rem;
             justify-content: flex-end;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            padding-top: 1.8rem;
         }
 
         .modal-actions .btn {
@@ -583,65 +658,28 @@
 
         /* responsive */
         @media (max-width: 1024px) {
-            .sidebar {
-                width: 100px;
-                padding: 1.2rem 0.6rem;
-            }
+            .sidebar { width: 100px; padding: 1.2rem 0.6rem; }
             .sidebar-brand .brand-text small,
-            .sidebar-brand .brand-text {
-                display: none;
-            }
-            .sidebar-brand .brand-logo {
-                width: 48px;
-                height: 48px;
-                border-radius: 14px;
-            }
+            .sidebar-brand .brand-text { display: none; }
+            .sidebar-brand .brand-logo { width: 48px; height: 48px; }
             .sidebar-nav .nav-label,
-            .sidebar-nav a span {
-                display: none;
-            }
-            .sidebar-nav a {
-                justify-content: center;
-                padding: 0.9rem;
-            }
-            .sidebar-nav a i {
-                font-size: 1.4rem;
-                width: auto;
-            }
-            .sidebar-footer {
-                display: none;
-            }
-            .main-content {
-                max-width: 100%;
-                padding: 1.5rem;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .sidebar-nav a span { display: none; }
+            .sidebar-nav a { justify-content: center; padding: 0.9rem; }
+            .sidebar-nav a i { font-size: 1.4rem; width: auto; }
+            .sidebar-footer { display: none; }
+            .main-content { max-width: 100%; padding: 1.5rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-row { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 640px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                max-width: 100%;
-                padding: 1rem;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .table-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .search-box input {
-                width: 140px;
-            }
+            .sidebar { display: none; }
+            .main-content { max-width: 100%; padding: 1rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .top-bar { flex-direction: column; align-items: flex-start; }
+            .table-header { flex-direction: column; align-items: flex-start; }
+            .search-box input { width: 140px; }
+            .modal-card { padding: 1.8rem; }
         }
     </style>
 </head>
@@ -650,7 +688,6 @@
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <!-- CUSTOM LOGO IMAGE: replace "logo.jpg" with your actual file name -->
             <img src="logo.jpg" alt="Church Logo" class="brand-logo" />
             <div class="brand-text">
                 Glory Church
@@ -660,7 +697,7 @@
         <nav class="sidebar-nav">
             <div class="nav-label">Main</div>
             <a href="#" class="active"><i class="fas fa-home"></i><span>Dashboard</span></a>
-            <a href="#"><i class="fas fa-users"></i><span>Members</span><span class="badge">12</span></a>
+            <a href="#"><i class="fas fa-users"></i><span>Members</span><span class="badge" id="memberBadge">0</span></a>
             <a href="#"><i class="fas fa-boxes"></i><span>Inventory</span></a>
             <a href="#"><i class="fas fa-coins"></i><span>Tithes</span><span class="badge">$</span></a>
             <a href="#"><i class="fas fa-sign-out-alt"></i><span>Departures</span></a>
@@ -675,14 +712,13 @@
 
     <!-- ===== MAIN ===== -->
     <main class="main-content">
-        <!-- top bar -->
         <div class="top-bar">
             <div class="page-title">
                 <h1>👥 Members</h1>
                 <p>Manage your church family with grace &amp; excellence</p>
             </div>
             <div class="top-actions">
-                <button class="btn" id="resetDemoBtn"><i class="fas fa-sync-alt"></i> Reset</button>
+                <button class="btn btn-outline" id="resetDemoBtn"><i class="fas fa-sync-alt"></i> Reset</button>
                 <button class="btn btn-glow" id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add Member</button>
             </div>
         </div>
@@ -715,63 +751,105 @@
             </div>
         </div>
 
-        <!-- table card -->
+        <!-- table -->
         <div class="table-card">
             <div class="table-header">
                 <h3><i class="fas fa-list-ul"></i> Member Directory</h3>
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search name, age, phone..." />
+                    <input type="text" id="searchInput" placeholder="Search name, phone, service..." />
                 </div>
             </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Member</th>
                             <th>Age</th>
                             <th>Phone</th>
-                            <th>Registration Date</th>
+                            <th>Joined</th>
+                            <th>Services</th>
                             <th>Status</th>
                             <th style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <!-- dynamic -->
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
         </div>
     </main>
 
-    <!-- ===== MODAL ===== -->
+    <!-- ===== ENHANCED MODAL ===== -->
     <div class="modal" id="memberModal">
         <div class="modal-card">
-            <h2 id="modalTitle"><i class="fas fa-user-plus" style="margin-right:12px; color:#f7d44a;"></i> Add Member</h2>
-            <form id="memberForm">
-                <label for="nameInput">Full Name</label>
-                <input type="text" id="nameInput" placeholder="e.g. Grace Oduya" required />
+            <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Add Member</h2>
+            <form id="memberForm" enctype="multipart/form-data">
+                <!-- Photo Upload -->
+                <label>Profile Photo</label>
+                <div class="photo-upload">
+                    <img id="photoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Ccircle cx='35' cy='35' r='35' fill='%23dce6f0'/%3E%3Ctext x='35' y='42' text-anchor='middle' fill='%236f8aa3' font-size='28' font-family='FontAwesome'%3E%3C/text%3E%3C/svg%3E" alt="Preview" class="photo-preview" />
+                    <input type="file" id="photoInput" accept="image/*" />
+                </div>
 
-                <label for="ageInput">Age</label>
-                <input type="number" id="ageInput" placeholder="e.g. 34" min="1" required />
+                <div class="form-row">
+                    <div>
+                        <label for="nameInput">Full Name *</label>
+                        <input type="text" id="nameInput" placeholder="e.g. Grace Oduya" required />
+                    </div>
+                    <div>
+                        <label for="ageInput">Age *</label>
+                        <input type="number" id="ageInput" placeholder="34" min="1" required />
+                    </div>
+                </div>
 
-                <label for="phoneInput">Phone</label>
-                <input type="text" id="phoneInput" placeholder="+1 234 567 890" required />
+                <div class="form-row">
+                    <div>
+                        <label for="phoneInput">Phone *</label>
+                        <input type="text" id="phoneInput" placeholder="+1 234 567 890" required />
+                    </div>
+                    <div>
+                        <label for="emailInput">Email</label>
+                        <input type="email" id="emailInput" placeholder="grace@church.org" />
+                    </div>
+                </div>
 
-                <label for="dateInput">Registration Date</label>
-                <input type="date" id="dateInput" required />
+                <div class="form-row">
+                    <div>
+                        <label for="dateInput">Registration Date *</label>
+                        <input type="date" id="dateInput" required />
+                    </div>
+                    <div>
+                        <label for="statusSelect">Status</label>
+                        <select id="statusSelect">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
 
-                <label for="statusSelect">Status</label>
-                <select id="statusSelect">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
+                <div class="form-row">
+                    <div>
+                        <label for="tithingInput">Tithes (USD)</label>
+                        <input type="number" id="tithingInput" placeholder="0.00" step="0.01" min="0" value="0" />
+                    </div>
+                    <div>
+                        <label for="occupationInput">Occupation</label>
+                        <input type="text" id="occupationInput" placeholder="e.g. Teacher" />
+                    </div>
+                </div>
+
+                <label for="servicesInput">Services Involved In</label>
+                <input type="text" id="servicesInput" placeholder="e.g. Choir, Usher, Youth, Media" />
+
+                <label for="notesInput">Notes / Special Gifts</label>
+                <textarea id="notesInput" placeholder="Any additional information..."></textarea>
 
                 <div class="modal-actions">
                     <button type="button" class="btn btn-ghost" id="closeModalBtn">Cancel</button>
                     <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Save</button>
                 </div>
                 <input type="hidden" id="editIndex" value="-1" />
+                <input type="hidden" id="photoData" value="" />
             </form>
         </div>
     </div>
@@ -782,17 +860,90 @@
             let members = [];
             let nextId = 1;
 
-            const defaultMembers = [
-                { id: 1, name: 'Mary Johnson', age: 34, phone: '+1 234 567 890', date: '2026-07-06', status: 'Active' },
-                { id: 2, name: 'John Mwangi', age: 28, phone: '+254 712 345 678', date: '2026-06-15', status: 'Active' },
-                { id: 3, name: 'Grace Oduya', age: 41, phone: '+1 987 654 321', date: '2026-05-20', status: 'Active' },
-                { id: 4, name: 'David Kimani', age: 55, phone: '+254 722 111 222', date: '2026-04-02', status: 'Inactive' },
-                { id: 5, name: 'Sarah Njoroge', age: 29, phone: '+1 456 789 012', date: '2026-07-01', status: 'Active' },
-                { id: 6, name: 'Michael Roberts', age: 47, phone: '+44 20 7946 0958', date: '2026-03-12', status: 'Active' },
-            ];
+            // Default members with extended fields
+            const defaultMembers = [{
+                id: 1,
+                name: 'Mary Johnson',
+                age: 34,
+                phone: '+1 234 567 890',
+                email: 'mary@church.org',
+                date: '2026-07-06',
+                status: 'Active',
+                tithing: 320,
+                occupation: 'Nurse',
+                services: 'Choir, Usher',
+                notes: 'Plays piano',
+                photo: ''
+            }, {
+                id: 2,
+                name: 'John Mwangi',
+                age: 28,
+                phone: '+254 712 345 678',
+                email: 'john@church.org',
+                date: '2026-06-15',
+                status: 'Active',
+                tithing: 150,
+                occupation: 'Engineer',
+                services: 'Youth, Media',
+                notes: 'Tech support',
+                photo: ''
+            }, {
+                id: 3,
+                name: 'Grace Oduya',
+                age: 41,
+                phone: '+1 987 654 321',
+                email: 'grace@church.org',
+                date: '2026-05-20',
+                status: 'Active',
+                tithing: 210,
+                occupation: 'Teacher',
+                services: 'Children, Choir',
+                notes: 'Leads children ministry',
+                photo: ''
+            }, {
+                id: 4,
+                name: 'David Kimani',
+                age: 55,
+                phone: '+254 722 111 222',
+                email: 'david@church.org',
+                date: '2026-04-02',
+                status: 'Inactive',
+                tithing: 0,
+                occupation: 'Retired',
+                services: 'Elder, Prayer',
+                notes: 'Moving to another city',
+                photo: ''
+            }, {
+                id: 5,
+                name: 'Sarah Njoroge',
+                age: 29,
+                phone: '+1 456 789 012',
+                email: 'sarah@church.org',
+                date: '2026-07-01',
+                status: 'Active',
+                tithing: 180,
+                occupation: 'Designer',
+                services: 'Worship, Media',
+                notes: 'Graphic designer',
+                photo: ''
+            }, {
+                id: 6,
+                name: 'Michael Roberts',
+                age: 47,
+                phone: '+44 20 7946 0958',
+                email: 'michael@church.org',
+                date: '2026-03-12',
+                status: 'Active',
+                tithing: 420,
+                occupation: 'Pastor',
+                services: 'Teaching, Counseling',
+                notes: 'Associate pastor',
+                photo: ''
+            }, ];
 
+            // ---------- STORAGE ----------
             function loadFromStorage() {
-                const stored = localStorage.getItem('gloryChurchMembers');
+                const stored = localStorage.getItem('gloryChurchMembersEnhanced');
                 if (stored) {
                     try {
                         const parsed = JSON.parse(stored);
@@ -809,7 +960,7 @@
             }
 
             function saveToStorage() {
-                localStorage.setItem('gloryChurchMembers', JSON.stringify(members));
+                localStorage.setItem('gloryChurchMembersEnhanced', JSON.stringify(members));
             }
 
             function initDefaultData() {
@@ -832,24 +983,38 @@
                 if (searchTerm) {
                     filtered = members.filter(m =>
                         m.name.toLowerCase().includes(searchTerm) ||
-                        String(m.age).includes(searchTerm) ||
-                        m.phone.includes(searchTerm)
+                        m.phone.includes(searchTerm) ||
+                        (m.services && m.services.toLowerCase().includes(searchTerm)) ||
+                        (m.occupation && m.occupation.toLowerCase().includes(searchTerm))
                     );
                 }
 
                 if (filtered.length === 0) {
                     tbody.innerHTML =
-                        `<tr class="empty-row"><td colspan="6"><i class="fas fa-people-arrows"></i> No members found</td></tr>`;
+                        `<tr class="empty-row"><td colspan="7"><i class="fas fa-people-arrows"></i> No members found</td></tr>`;
                 } else {
                     tbody.innerHTML = filtered.map((m, idx) => {
                         const realIndex = members.indexOf(m);
                         const statusClass = m.status === 'Active' ? '' : 'inactive';
+                        const photoSrc = m.photo || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38"%3E%3Ccircle cx="19" cy="19" r="19" fill="%23dce6f0"/%3E%3Ctext x="19" y="24" text-anchor="middle" fill="%236f8aa3" font-size="16" font-family="FontAwesome"%3E%3C/text%3E%3C/svg%3E';
+
+                        // services tags
+                        let servicesHtml = '';
+                        if (m.services) {
+                            const tags = m.services.split(',').map(s => s.trim()).filter(Boolean);
+                            servicesHtml = tags.map(t => `<span class="services-tag">${t}</span>`).join(' ');
+                        }
+
                         return `
                             <tr>
-                                <td><i class="fas fa-user-circle" style="color:#1f4462; margin-right:12px;"></i>${m.name}</td>
+                                <td>
+                                    <img src="${photoSrc}" alt="${m.name}" class="member-avatar" />
+                                    ${m.name}
+                                </td>
                                 <td>${m.age}</td>
                                 <td>${m.phone}</td>
                                 <td>${m.date}</td>
+                                <td>${servicesHtml || '—'}</td>
                                 <td><span class="status-badge ${statusClass}">${m.status}</span></td>
                                 <td style="text-align:center;" class="action-icons">
                                     <i class="fas fa-edit" data-action="edit" data-index="${realIndex}" title="Edit"></i>
@@ -870,19 +1035,13 @@
                     const d = new Date(m.date);
                     return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
                 }).length;
-
-                const totalTithing = members.reduce((sum, m) => {
-                    if (m.status === 'Active') {
-                        const base = 50 + (m.id * 23) % 280;
-                        return sum + base;
-                    }
-                    return sum;
-                }, 0);
+                const totalTithing = members.reduce((sum, m) => sum + (m.tithing || 0), 0);
 
                 document.getElementById('totalMembers').textContent = total;
                 document.getElementById('activeMembers').textContent = active;
                 document.getElementById('newThisMonth').textContent = newThisMonth;
                 document.getElementById('totalTithing').textContent = `$${totalTithing.toFixed(0)}`;
+                document.getElementById('memberBadge').textContent = total;
 
                 // attach events
                 document.querySelectorAll('[data-action="edit"]').forEach(el => {
@@ -909,19 +1068,53 @@
             const nameInput = document.getElementById('nameInput');
             const ageInput = document.getElementById('ageInput');
             const phoneInput = document.getElementById('phoneInput');
+            const emailInput = document.getElementById('emailInput');
             const dateInput = document.getElementById('dateInput');
             const statusSelect = document.getElementById('statusSelect');
+            const tithingInput = document.getElementById('tithingInput');
+            const occupationInput = document.getElementById('occupationInput');
+            const servicesInput = document.getElementById('servicesInput');
+            const notesInput = document.getElementById('notesInput');
+            const photoInput = document.getElementById('photoInput');
+            const photoPreview = document.getElementById('photoPreview');
+            const photoData = document.getElementById('photoData');
             const editIndexInput = document.getElementById('editIndex');
             const memberForm = document.getElementById('memberForm');
 
-            function openAddModal() {
-                modalTitle.innerHTML = '<i class="fas fa-user-plus" style="margin-right:12px; color:#f7d44a;"></i> Add Member';
+            // Photo preview
+            photoInput.addEventListener('change', function(e) {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        photoPreview.src = ev.target.result;
+                        photoData.value = ev.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            function resetForm() {
                 nameInput.value = '';
                 ageInput.value = '';
                 phoneInput.value = '';
+                emailInput.value = '';
                 dateInput.value = '';
                 statusSelect.value = 'Active';
+                tithingInput.value = '0';
+                occupationInput.value = '';
+                servicesInput.value = '';
+                notesInput.value = '';
+                photoInput.value = '';
+                photoData.value = '';
+                photoPreview.src =
+                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70"%3E%3Ccircle cx="35" cy="35" r="35" fill="%23dce6f0"/%3E%3Ctext x="35" y="42" text-anchor="middle" fill="%236f8aa3" font-size="28" font-family="FontAwesome"%3E%3C/text%3E%3C/svg%3E';
                 editIndexInput.value = '-1';
+            }
+
+            function openAddModal() {
+                modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Add Member';
+                resetForm();
                 modal.style.display = 'flex';
                 nameInput.focus();
             }
@@ -929,12 +1122,21 @@
             function openEditModal(index) {
                 const m = members[index];
                 if (!m) return;
-                modalTitle.innerHTML = '<i class="fas fa-user-edit" style="margin-right:12px; color:#f7d44a;"></i> Edit Member';
-                nameInput.value = m.name;
-                ageInput.value = m.age;
-                phoneInput.value = m.phone;
-                dateInput.value = m.date;
-                statusSelect.value = m.status;
+                modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Edit Member';
+                nameInput.value = m.name || '';
+                ageInput.value = m.age || '';
+                phoneInput.value = m.phone || '';
+                emailInput.value = m.email || '';
+                dateInput.value = m.date || '';
+                statusSelect.value = m.status || 'Active';
+                tithingInput.value = m.tithing || 0;
+                occupationInput.value = m.occupation || '';
+                servicesInput.value = m.services || '';
+                notesInput.value = m.notes || '';
+                photoData.value = m.photo || '';
+                photoPreview.src = m.photo ||
+                    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70"%3E%3Ccircle cx="35" cy="35" r="35" fill="%23dce6f0"/%3E%3Ctext x="35" y="42" text-anchor="middle" fill="%236f8aa3" font-size="28" font-family="FontAwesome"%3E%3C/text%3E%3C/svg%3E';
+                photoInput.value = '';
                 editIndexInput.value = index;
                 modal.style.display = 'flex';
                 nameInput.focus();
@@ -954,11 +1156,17 @@
                 const name = nameInput.value.trim();
                 const age = parseInt(ageInput.value);
                 const phone = phoneInput.value.trim();
+                const email = emailInput.value.trim();
                 const date = dateInput.value;
                 const status = statusSelect.value;
+                const tithing = parseFloat(tithingInput.value) || 0;
+                const occupation = occupationInput.value.trim();
+                const services = servicesInput.value.trim();
+                const notes = notesInput.value.trim();
+                const photo = photoData.value || '';
 
                 if (!name || !age || !phone || !date) {
-                    alert('Please fill in all fields.');
+                    alert('Please fill in all required fields (Name, Age, Phone, Date).');
                     return;
                 }
 
@@ -967,10 +1175,29 @@
                     members[editIdx].name = name;
                     members[editIdx].age = age;
                     members[editIdx].phone = phone;
+                    members[editIdx].email = email;
                     members[editIdx].date = date;
                     members[editIdx].status = status;
+                    members[editIdx].tithing = tithing;
+                    members[editIdx].occupation = occupation;
+                    members[editIdx].services = services;
+                    members[editIdx].notes = notes;
+                    if (photo) members[editIdx].photo = photo;
                 } else {
-                    members.push({ id: nextId++, name, age, phone, date, status });
+                    members.push({
+                        id: nextId++,
+                        name,
+                        age,
+                        phone,
+                        email,
+                        date,
+                        status,
+                        tithing,
+                        occupation,
+                        services,
+                        notes,
+                        photo
+                    });
                 }
                 saveToStorage();
                 closeModal();
